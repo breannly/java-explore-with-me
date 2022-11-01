@@ -1,25 +1,33 @@
-package com.example.server.event;
+package com.example.server.event.controller;
 
+import com.example.server.event.service.RequestService;
+import com.example.server.event.dto.ParticipationRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users/{userId}/requests")
 public class AuthorizedRequestController {
 
-    @GetMapping
-    public List<Request> getUserRequests(@PathVariable("userId") Long userId) {
-        return null;
-    }
+	private final RequestService requestService;
 
-    @PostMapping
-    public Request getUserRequest(@PathVariable("userId") Long userId,
-                                  @RequestParam("eventId") Long eventId) {
-        return null;
-    }
+	@GetMapping
+	public List<ParticipationRequestDto> getUserRequests(@PathVariable("userId") Long userId) {
+		return requestService.getUserRequests(userId);
+	}
 
-    @PatchMapping
-    public Request cancelUserRequest(@PathVariable("userId") Long userId,
-                                     @RequestParam("requestId") Long requestId) {
-        return null;
-    }
+	@PostMapping
+	public ParticipationRequestDto createUserRequest(@PathVariable("userId") Long userId,
+													 @RequestParam("eventId") Long eventId) {
+		return requestService.createUserRequest(userId, eventId);
+	}
+
+	@PatchMapping("/{requestId}/cancel")
+	public ParticipationRequestDto cancelUserRequest(@PathVariable("userId") Long userId,
+													 @PathVariable("requestId") Long requestId) {
+		return requestService.cancelUserRequest(userId, requestId);
+	}
 }

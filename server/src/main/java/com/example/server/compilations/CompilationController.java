@@ -1,23 +1,25 @@
-package com.example.server.complitation;
+package com.example.server.compilations;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/compilations")
 public class CompilationController {
 
-    @GetMapping
-    public Compilation getCompilations() {
-        return null;
-    }
+	private final CompilationService compilationService;
 
-    @GetMapping("/{compId}")
-    public Compilation getCompilation(@PathVariable("compId") Long compId) {
-        return null;
-    }
+	@GetMapping
+	public List<CompilationDto> getCompilations(@RequestParam(value = "from", defaultValue = "0") Integer from,
+												@RequestParam(value = "size", defaultValue = "10") Integer size) {
+		return compilationService.getCompilations(from, size);
+	}
+
+	@GetMapping("/{compId}")
+	public CompilationDto getCompilation(@PathVariable("compId") Long compId) {
+		return compilationService.getCompilation(compId);
+	}
 }
