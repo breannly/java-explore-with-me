@@ -58,23 +58,24 @@ public class EventClient {
 		restHit.exchange(serverStatUrl + API_PREFIX_HIT, HttpMethod.POST, body, Object.class);
 	}
 
-	public  ResponseEntity<List<ViewStats>> getStats(String start, String end, List<String> uris, Boolean unique) {
+	public ResponseEntity<List<ViewStats>> getStats(String start, String end, List<String> uris, Boolean unique) {
 		String requestParam = makeRequestPath(start, end, uris, unique);
 		HttpEntity<EndpointHit> body = new HttpEntity<>(null, defaultHeaders());
 		String pathRequest = serverStatUrl + API_PREFIX_STAT + requestParam;
 		return restStat.exchange(pathRequest,
 				HttpMethod.GET,
 				body,
-				new ParameterizedTypeReference<>() {},
-				Collections.emptyMap() );
+				new ParameterizedTypeReference<>() {
+				},
+				Collections.emptyMap());
 	}
 
 	public Long getEventViews(LocalDateTime publishedOn, Long eventId) {
 		List<ViewStats> viewStats = Objects.requireNonNull(getStats(
-						publishedOn.format(formatter),
-						LocalDateTime.now().format(formatter),
-						List.of(makeEventUri(eventId)),
-						false).getBody());
+				publishedOn.format(formatter),
+				LocalDateTime.now().format(formatter),
+				List.of(makeEventUri(eventId)),
+				false).getBody());
 		if (viewStats.isEmpty()) {
 			return 0L;
 		}
