@@ -5,6 +5,7 @@ import com.example.server.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class AdminUserController {
     }
 
     @PostMapping
-    public UserDto createUser(@RequestBody NewUserRequest newUserRequest) {
+    public UserDto createUser(@Valid @RequestBody NewUserRequest newUserRequest) {
         return userService.createUser(newUserRequest);
     }
 

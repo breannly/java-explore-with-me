@@ -27,7 +27,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class EventClient {
 
-	private final RestTemplate restHit;
 	private final RestTemplate restStat;
 
 	private static final String APP = "ewm-main-service";
@@ -41,21 +40,17 @@ public class EventClient {
 
 	@Autowired
 	public EventClient(RestTemplateBuilder builder) {
-		restHit = builder
-				.uriTemplateHandler(new DefaultUriBuilderFactory(serverStatUrl + API_PREFIX_HIT))
-				.requestFactory(HttpComponentsClientHttpRequestFactory::new)
-				.build();
 		restStat = builder
-				.uriTemplateHandler(new DefaultUriBuilderFactory(serverStatUrl + API_PREFIX_STAT))
+				.uriTemplateHandler(new DefaultUriBuilderFactory(serverStatUrl + ""))
 				.requestFactory(HttpComponentsClientHttpRequestFactory::new)
 				.build();
 	}
 
 
-	public void saveStat(String uri, String ip) {
+	public void postStat(String uri, String ip) {
 		EndpointHit endpointHit = new EndpointHit(APP, uri, ip, LocalDateTime.now());
 		HttpEntity<EndpointHit> body = new HttpEntity<>(endpointHit, defaultHeaders());
-		restHit.exchange(serverStatUrl + API_PREFIX_HIT, HttpMethod.POST, body, Object.class);
+		restStat.exchange(serverStatUrl + API_PREFIX_HIT, HttpMethod.POST, body, Object.class);
 	}
 
 	public ResponseEntity<List<ViewStats>> getStats(String start, String end, List<String> uris, Boolean unique) {

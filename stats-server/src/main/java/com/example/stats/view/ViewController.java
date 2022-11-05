@@ -3,6 +3,7 @@ package com.example.stats.view;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -13,8 +14,8 @@ public class ViewController {
 
 	@PostMapping
 	@RequestMapping("/hit")
-	public void saveStat(@RequestBody EndpointHit endpointHit) {
-		viewService.saveStat(endpointHit);
+	public void postStat(@Valid @RequestBody EndpointHit endpointHit) {
+		viewService.postStat(endpointHit);
 	}
 
 	@GetMapping

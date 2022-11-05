@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ViewService {
 
-	void saveStat(EndpointHit endpointHit);
+	void postStat(EndpointHit endpointHit);
 
 	List<ViewStats> getStats(StatsSearchParams searchParams);
 }

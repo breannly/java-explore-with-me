@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,13 +34,13 @@ public class AuthorizedEventController {
 	}
 
 	@PostMapping
-	public EventFullDto createUserEvent(@RequestBody NewEventDto newEventDto,
+	public EventFullDto createUserEvent(@Valid @RequestBody NewEventDto newEventDto,
 										@PathVariable("userId") Long userId) {
 		return eventService.createUserEvent(newEventDto, userId);
 	}
 
 	@PatchMapping
-	public EventFullDto updateUserEvent(@RequestBody UpdateEventRequest updateEvent,
+	public EventFullDto updateUserEvent(@Valid @RequestBody UpdateEventRequest updateEvent,
 										@PathVariable("userId") Long userId) {
 		return eventService.updateUserEvent(userId, updateEvent);
 	}

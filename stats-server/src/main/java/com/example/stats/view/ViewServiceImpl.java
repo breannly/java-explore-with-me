@@ -13,7 +13,7 @@ public class ViewServiceImpl implements ViewService {
 	private final ViewRepository viewRepository;
 
 	@Override
-	public void saveStat(EndpointHit endpointHit) {
+	public void postStat(EndpointHit endpointHit) {
 		View view = ViewMapper.mapToView(endpointHit);
 		viewRepository.save(view);
 	}

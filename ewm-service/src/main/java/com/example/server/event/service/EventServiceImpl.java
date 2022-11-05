@@ -15,6 +15,7 @@ import com.example.server.event.model.*;
 import com.example.server.event.repo.EventRepository;
 import com.example.server.event.repo.LocationRepository;
 import com.example.server.event.repo.RequestRepository;
+import com.example.server.exception.ForbiddenAccessException;
 import com.example.server.exception.ObjectNotFoundException;
 import com.example.server.exception.ValidationException;
 import com.example.server.user.User;
@@ -39,6 +40,8 @@ public class EventServiceImpl implements EventService {
 	private final UserRepository userRepository;
 	private final LocationRepository locationRepository;
 	private final EventClient eventClient;
+
+	private static final int MIN_AVAILABLE_TIME_DIFFERENCE = 2;
 
 	@Override
 	public List<EventShortDto> getEvents(EventSearchParams params, Integer from, Integer size) {
@@ -79,7 +82,7 @@ public class EventServiceImpl implements EventService {
 	public EventFullDto getEvent(Long eventId, String uri, String ip) {
 		Event event = eventRepository.findPublishedEvent(eventId).orElseThrow(()
 				-> new ObjectNotFoundException("Event not found"));
-		eventClient.saveStat(uri, ip);
+		eventClient.postStat(uri, ip);
 		Long confirmedRequests = requestRepository.countConfirmedRequests(eventId);
 		Long views = eventClient.getEventViews(event.getCreatedOn(), event.getId());
 		return EventMapper.mapToFullDto(event, confirmedRequests, views);
@@ -121,7 +124,7 @@ public class EventServiceImpl implements EventService {
 		Category category = categoryRepository.findById(updateEvent.getCategory()).orElseThrow(()
 				-> new ObjectNotFoundException("Category not found"));
 		if (!currentEvent.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (currentEvent.getState().equals(EventState.PUBLISHED)) {
 			throw new ValidationException("Validation failed");
@@ -136,7 +139,7 @@ public class EventServiceImpl implements EventService {
 	private void validateEventDate(LocalDateTime currentEvent, LocalDateTime updateEvent) {
 		int updateEventDate = updateEvent == null ? 0 : updateEvent.getHour();
 		int hoursDifference = currentEvent.getHour() - updateEventDate;
-		if (hoursDifference < 2 && hoursDifference != 0) {
+		if (hoursDifference < MIN_AVAILABLE_TIME_DIFFERENCE && hoursDifference != 0) {
 			throw new ValidationException("Validation failed");
 		}
 	}
@@ -171,7 +174,7 @@ public class EventServiceImpl implements EventService {
 		Event foundEvent = eventRepository.findById(eventId).orElseThrow(()
 				-> new ObjectNotFoundException("Event not found"));
 		if (!foundEvent.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		Long confirmedRequests = requestRepository.countConfirmedRequests(foundEvent.getId());
 		Long views = eventClient.getEventViews(foundEvent.getCreatedOn(), foundEvent.getId());
@@ -185,7 +188,7 @@ public class EventServiceImpl implements EventService {
 		Event foundEvent = eventRepository.findById(eventId).orElseThrow(()
 				-> new ObjectNotFoundException("Event not found"));
 		if (!foundEvent.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (!foundEvent.getState().equals(EventState.PENDING)) {
 			throw new ValidationException("Validation failed");
@@ -203,7 +206,7 @@ public class EventServiceImpl implements EventService {
 		Event event = eventRepository.findById(eventId).orElseThrow(()
 				-> new ObjectNotFoundException("Event not found"));
 		if (!event.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		return requestRepository.findRequestsByEventId(eventId)
 				.stream()
@@ -220,10 +223,10 @@ public class EventServiceImpl implements EventService {
 		Request foundRequest = requestRepository.findById(reqId).orElseThrow(()
 				-> new ObjectNotFoundException("Request not found"));
 		if (!foundEvent.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (!foundRequest.getEvent().getId().equals(eventId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (!foundRequest.getStatus().equals(RequestStatus.PENDING)) {
 			throw new ValidationException("Validation failed");
@@ -242,10 +245,10 @@ public class EventServiceImpl implements EventService {
 		Request foundRequest = requestRepository.findById(reqId).orElseThrow(()
 				-> new ObjectNotFoundException("Request not found"));
 		if (!foundEvent.getInitiator().getId().equals(userId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (!foundRequest.getEvent().getId().equals(eventId)) {
-			throw new ValidationException("Validation failed");
+			throw new ForbiddenAccessException("Access denied");
 		}
 		if (!foundRequest.getStatus().equals(RequestStatus.PENDING)) {
 			throw new ValidationException("Validation failed");

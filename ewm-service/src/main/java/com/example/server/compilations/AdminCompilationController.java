@@ -3,6 +3,8 @@ package com.example.server.compilations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/compilations")
@@ -11,7 +13,7 @@ public class AdminCompilationController {
 	private final CompilationService compilationService;
 
 	@PostMapping
-	public CompilationDto createCompilation(@RequestBody NewCompilationDto compilation) {
+	public CompilationDto createCompilation(@Valid @RequestBody NewCompilationDto compilation) {
 		return compilationService.createCompilation(compilation);
 	}
 
