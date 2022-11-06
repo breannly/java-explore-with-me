@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,8 +22,14 @@ public class View {
     @Column(name = "view_id")
     private Long id;
 
+    @NotNull
     private String app;
+
+    @NotNull
     private String uri;
+
+    @NotNull
     private String ip;
+
     private LocalDateTime timestamp;
 }

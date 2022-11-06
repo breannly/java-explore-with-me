@@ -21,6 +21,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,18 +40,26 @@ public class Event {
 	@Column(name = "event_id")
 	private Long id;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "initiator_id")
 	private User initiator;
 
+	@NotBlank
+	@Size(max = 120)
 	private String title;
 
+	@NotBlank
+	@Size(max = 2000)
 	private String annotation;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	@NotBlank
+	@Size(max = 7000)
 	private String description;
 
 	@Column(name = "created_on")

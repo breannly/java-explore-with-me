@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -20,8 +22,12 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @NotBlank
+    @Size(max = 200)
     private String email;
 
+    @NotBlank
+    @Size(max = 200)
     @Column(name = "user_name")
     private String name;
 }

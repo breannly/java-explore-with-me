@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -25,6 +27,8 @@ public class Category {
 	@Column(name = "category_id")
 	private Long id;
 
+	@NotBlank
+	@Size(max = 20)
 	@Column(name = "category_name")
 	private String name;
 }

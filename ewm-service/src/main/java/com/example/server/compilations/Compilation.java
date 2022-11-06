@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -30,8 +33,11 @@ public class Compilation {
 	@Column(name = "compilation_id")
 	private Long id;
 
+	@NotBlank
+	@Size(max = 100)
 	private String title;
 
+	@NotNull
 	private Boolean pinned;
 
 	@ManyToMany

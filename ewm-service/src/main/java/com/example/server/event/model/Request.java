@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,10 +23,12 @@ public class Request {
     @Column(name = "request_id")
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "requester_id")
     private User requester;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
