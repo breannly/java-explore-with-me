@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -41,7 +42,7 @@ public class EventServiceImpl implements EventService {
 	private final LocationRepository locationRepository;
 	private final EventClient eventClient;
 
-	private static final int MIN_AVAILABLE_TIME_DIFFERENCE = 2;
+	private static final int MIN_AVAILABLE_TIME_LIMIT = 2;
 
 	@Override
 	public List<EventShortDto> getEvents(EventSearchParams params, Integer from, Integer size) {
@@ -137,9 +138,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	private void validateEventDate(LocalDateTime currentEvent, LocalDateTime updateEvent) {
-		int updateEventDate = updateEvent == null ? 0 : updateEvent.getHour();
-		int hoursDifference = currentEvent.getHour() - updateEventDate;
-		if (hoursDifference < MIN_AVAILABLE_TIME_DIFFERENCE && hoursDifference != 0) {
+		boolean differentTimes = currentEvent.equals(updateEvent);
+		if (Duration.between(currentEvent, updateEvent).toHours() < MIN_AVAILABLE_TIME_LIMIT && !differentTimes) {
 			throw new ValidationException("Validation failed");
 		}
 	}

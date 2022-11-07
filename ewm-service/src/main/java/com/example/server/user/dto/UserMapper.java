@@ -11,6 +11,13 @@ public class UserMapper {
 		return user;
 	}
 
+	public static UserShortDto mapToUserShortDto(User user) {
+		return new UserShortDto(
+				user.getId(),
+				user.getName()
+		);
+	}
+
 	public static UserDto mapToUserDto(User user) {
 		return new UserDto(
 				user.getId(),
