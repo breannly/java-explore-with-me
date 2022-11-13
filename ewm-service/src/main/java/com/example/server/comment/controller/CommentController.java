@@ -17,7 +17,7 @@ public class CommentController {
 	@GetMapping("/{eventId}")
 	public List<CommentShortDto> getComments(@PathVariable("eventId") Long eventId,
 											 @RequestParam("from") Integer from,
-											 @RequestParam("from") Integer size) {
+											 @RequestParam("size") Integer size) {
 		return commentService.getEventComments(eventId, from, size);
 	}
 }

@@ -2,7 +2,7 @@ package com.example.server.comment.dto;
 
 import com.example.server.comment.model.Comment;
 import com.example.server.event.model.Event;
-import com.example.server.event.model.EventTinyDto;
+import com.example.server.event.dto.EventTinyDto;
 import com.example.server.user.User;
 import com.example.server.user.dto.UserShortDto;
 
@@ -42,7 +42,8 @@ public class CommentMapper {
 				),
 				comment.getDescription(),
 				comment.getCreatedOn(),
-				comment.getLastUpdate() != null
+				comment.getLastUpdate() != null,
+				comment.getAvailable()
 		);
 	}
 }

@@ -14,4 +14,5 @@ public class ReportDto {
 	private final CommentShortDto comment;
 	private final ReportReason reason;
 	private final String description;
+	private final ReportStatus status;
 }

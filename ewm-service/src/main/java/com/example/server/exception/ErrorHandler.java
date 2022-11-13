@@ -38,6 +38,4 @@ public class ErrorHandler {
 	public ErrorResponse handleThrowable(final Throwable e) {
 		return new ErrorResponse(e.getMessage());
 	}
-
-
 }

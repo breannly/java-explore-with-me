@@ -4,6 +4,7 @@ import com.example.server.comment.dto.*;
 import com.example.server.comment.model.Comment;
 import com.example.server.comment.repo.CommentRepository;
 import com.example.server.event.model.Event;
+import com.example.server.event.model.EventState;
 import com.example.server.event.repo.EventRepository;
 import com.example.server.exception.ForbiddenAccessException;
 import com.example.server.exception.ObjectNotFoundException;
@@ -58,6 +59,9 @@ public class CommentServiceImpl implements CommentService {
 				-> new ObjectNotFoundException("User not found"));
 		Event event = eventRepository.findById(eventId).orElseThrow(()
 				-> new ObjectNotFoundException("Event not found"));
+		if (!event.getState().equals(EventState.PUBLISHED)) {
+			throw new ForbiddenAccessException("Access denied");
+		}
 		Comment comment = CommentMapper.mapToComment(newCommentDto, user, event);
 		return CommentMapper.mapToCommentDto(commentRepository.save(comment));
 	}

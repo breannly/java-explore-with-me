@@ -4,6 +4,7 @@ import com.example.server.comment.model.Comment;
 import com.example.server.comment.repo.CommentRepository;
 import com.example.server.exception.ObjectNotFoundException;
 import com.example.server.exception.ValidationException;
+import com.example.server.user.User;
 import com.example.server.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ReportDto reportComment(Long userId, Long commentId, NewReportDto commentDto) {
-		userRepository.findById(userId).orElseThrow(()
+		User user = userRepository.findById(userId).orElseThrow(()
 				-> new ObjectNotFoundException("User not found"));
 		Comment comment = commentRepository.findById(commentId).orElseThrow(()
 				-> new ObjectNotFoundException("Comment not found"));
@@ -28,7 +29,7 @@ public class ReportServiceImpl implements ReportService {
 			throw new ValidationException("Validation failed");
 		}
 		ReportReason reason = ReportReason.from(commentDto.getReason());
-		Report report = ReportMapper.mapToReport(commentDto, reason);
+		Report report = ReportMapper.mapToReport(commentDto, user, comment, reason);
 		return ReportMapper.mapToReportDto(reportRepository.save(report));
 	}
 

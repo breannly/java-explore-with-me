@@ -1,4 +1,4 @@
-package com.example.server.event.model;
+package com.example.server.event.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

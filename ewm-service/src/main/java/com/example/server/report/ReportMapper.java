@@ -1,14 +1,20 @@
 package com.example.server.report;
 
 import com.example.server.comment.dto.CommentShortDto;
+import com.example.server.comment.model.Comment;
+import com.example.server.user.User;
 import com.example.server.user.dto.UserShortDto;
 
 public class ReportMapper {
 
 	public static Report mapToReport(NewReportDto newRequestCommentDto,
+									 User user,
+									 Comment comment,
 									 ReportReason reason) {
 		Report requestComment = new Report();
 		requestComment.setDescription(newRequestCommentDto.getDescription());
+		requestComment.setPlaintiff(user);
+		requestComment.setComment(comment);
 		requestComment.setReason(reason);
 
 		return requestComment;
@@ -31,7 +37,8 @@ public class ReportMapper {
 						report.getComment().getAvailable()
 				),
 				report.getReason(),
-				report.getDescription()
+				report.getDescription(),
+				report.getStatus()
 		);
 	}
 }

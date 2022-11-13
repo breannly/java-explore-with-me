@@ -50,5 +50,5 @@ public class Report {
 	private String description;
 
 	@Enumerated(value = EnumType.STRING)
-	private ReportStatus status;
+	private ReportStatus status = ReportStatus.WAITING;
 }
